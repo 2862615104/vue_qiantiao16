@@ -1,6 +1,68 @@
 <template>
     <div>
- 商品列表
+        <div class="section">
+            <!-- <div class="location">
+                <span>当前位置：</span>
+                <router-link to="">首页</router-link>
+                <router-link to="">购物商城</router-link>
+            </div> -->
+        </div>
+
+        <!-- 页面头部 - 分类列表与轮播图 -->
+        <div class="section">
+            <div class="wrapper">
+                <div class="wrap-box">
+
+                    <!--类别菜单-->
+                    <div class="left-220" style="margin:0;">
+                        <div class="banner-nav">
+                            <ul>
+                                <!--此处声明下面可重复循环-->
+
+                                <li v-for="item in top.catelist" :key="item.id">
+                                    <h3>
+                                        <i class="iconfont icon-arrow-right"></i>
+                                        <span>{{item.title}}</span>
+                                        <p>
+                                            <span v-for="subitem in item.subcates" :key="subitem.id">{{ subitem.title }}&nbsp;</span>
+                                        </p>
+                                    </h3>
+                                    <div class="item-box">
+                                        <!--如有三级分类，此处可循环-->
+                                        <dl>
+                                            <dt>
+                                                <a href="/goods/40.html">{{item.title}}</a>
+                                            </dt>
+                                            <dd>
+                                                <router-link to="" v-for="subitem in item.subcates" :key="subitem.id">{{ subitem.title }}&nbsp;</router-link>
+                                            </dd>
+                                        </dl>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <!--/类别菜单-->
+                              
+                    <!--幻灯片-->
+
+                </div>
+                <!--/幻灯片-->
+                <div class="left-705">
+                <div class="banner-img">
+                     <el-carousel style="height: 100%">
+                              <el-carousel-item v-for="item in top.sliderlist" :key="item.id">
+                                  <img :src="item.img_url" :alt="item.title">
+                              </el-carousel-item>
+                          </el-carousel>
+                </div>
+            </div>
+
+                <app-aside :list="top.toplist"></app-aside>
+                <!-- 侧边栏 - 推荐商品列表, 抽取为公共组件 -->
+                
+            </div>
+        </div>
     </div>
 </template>
 
