@@ -19,7 +19,33 @@
                         <div class="goods-box clearfix">
                             <!--商品图片-->
                             <div class="pic-box">
-
+                                <div class="magnifier" id="magnifier1">
+                                    <div class="magnifier-container">
+                                        <div class="images-cover"></div>
+                                        <!--当前图片显示容器-->
+                                        <div class="move-view"></div>
+                                        <!--跟随鼠标移动的盒子-->
+                                    </div>
+                                    <div class="magnifier-assembly">
+                                        <div class="magnifier-btn">
+                                            <span class="magnifier-btn-left">&lt;</span>
+                                            <span class="magnifier-btn-right">&gt;</span>
+                                        </div>
+                                        <!--按钮组-->
+                                        <div class="magnifier-line">
+                                            <ul class="clearfix animation03">
+                                                <li v-for="item in top.imglist" :key="item.id">
+                                                    <div class="small-img">
+                                                        <img :src="item.original_path" />
+                                                    </div>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                        <!--缩略图-->
+                                    </div>
+                                    <div class="magnifier-view"></div>
+                                    <!--经过放大的图片显示容器-->
+                                </div>
                             </div>
                             <!--/商品图片-->
 
@@ -110,47 +136,68 @@
 </template>
 
 <script>
-    import AppAside from './subcom/CommonAside.vue';
-    export default {
-        components: {
-            AppAside
-        },
-        data() {
-            return {
-                id: this.$route.params.id,
-                num: 1,
-                top: {
-                    goodsinfo: {},
-                    imglist: [],
-                    hotgoodslist: []
-                }
-            }
-        },
-        methods: {
-            // 根据当前id获取数据
-            getTop() {
-                this.$http.get(this.$api.goodsDetail + this.id).then(res => {
-                    if(res.data.status == 0) {
-                        this.top = res.data.message;
-                    }
-                });
-            }
-        },
-        created() {
-            this.getTop();
-        },
-        // 商品详情页面的右侧列表, 可以点击切换不同的商品进行预览
-        // 但是默认情况下当前页面切换到当前页面不会触发组件的重新渲染, 为了解决这个问题,
-        // 我们可以监听$route对象的变化, 因为切换商品后, $route.params.id变化了, 我们监听它, 
-        // 然后主动发起http请求, 调用接口获取新id的数据进行视图刷新
-        watch: {
-            $route() {
-                this.id = this.$route.params.id;
-                this.getTop();
-            }
-        }
+//导入放大镜插件
+import '@/lib/imgzoom/css/magnifier.css';
+import '@/lib/imgzoom/js/magnifier.js';
+import $ from 'jquery';
+
+import AppAside from "./subcom/CommonAside.vue";
+export default {
+  components: {
+    AppAside
+  },
+  data() {
+    return {
+      id: this.$route.params.id,
+      num: 1,
+      top: {
+        goodsinfo: {},
+        imglist: [],
+        hotgoodslist: []
+      }
     };
+  },
+  methods: {
+    // 根据当前id获取数据
+    getTop() {
+      this.$http.get(this.$api.goodsDetail + this.id).then(res => {
+        if (res.data.status == 0) {
+          this.top = res.data.message;
+        }
+      });
+    }
+  },
+  created() {
+    this.getTop();
+  },
+
+mounted () {
+    var magnifierConfig = {
+		magnifier : "#magnifier1",//最外层的大容器
+		width : 370,//承载容器宽
+		height : 370,//承载容器高
+		moveWidth : null,//如果设置了移动盒子的宽度，则不计算缩放比例
+		zoom : 5//缩放比例
+	};
+
+setTimeout(function () {
+	var _magnifier = $().imgzoon(magnifierConfig);
+},100)
+},
+
+  // 商品详情页面的右侧列表, 可以点击切换不同的商品进行预览
+  // 但是默认情况下当前页面切换到当前页面不会触发组件的重新渲染, 为了解决这个问题,
+  // 我们可以监听$route对象的变化, 因为切换商品后, $route.params.id变化了, 我们监听它,
+  // 然后主动发起http请求, 调用接口获取新id的数据进行视图刷新
+  watch: {
+    $route() {
+      this.id = this.$route.params.id;
+      this.getTop();
+    }
+  }
+};
 </script>
 
 <style scoped>
+
 </style>
