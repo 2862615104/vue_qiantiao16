@@ -15,7 +15,7 @@
 
             <!--/子类-->
             <div class="wrapper clearfix">
-                <div class="wrap-box">
+                <div class="wrap-box"> 
                     <ul class="img-list">
                         <li v-for="subitem in item.datas" :key="subitem.artID">
                            <router-link :to="{name: 'goodsDetail', params: {id: subitem.artID}}">

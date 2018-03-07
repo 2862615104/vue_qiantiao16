@@ -101,18 +101,15 @@
 
                         <div id="goodsTabs" class="goods-tab bg-wrap">
                             <!--选项卡-->
-                            <div id="tabHead" class="tab-head" style="position: static; top: 517px; width: 925px;">
-                                <ul>
-                                    <li>
-                                        <a class="selected" href="javascript:;">商品介绍</a>
-                                    </li>
-                                    <li>
-                                        <a href="javascript:;" class="">商品评论</a>
-                                    </li>
-                                </ul>
-                            </div>
-                            <!--/选项卡-->
-
+                            <el-tabs type="border-card">
+                                <el-tab-pane label="商品介绍">
+                                    <div v-html="top.goodsinfo.content"></div>
+                                </el-tab-pane>
+                                <el-tab-pane label="商品评论">
+                                    <!-- 评论 - 抽取为公共组件, 需要一个id来获取默认的评论列表以及发表评论 -->
+                                    <comment :id="id"></comment>
+                                </el-tab-pane>
+                            </el-tabs>
                             <!--选项内容-->
                             <div class="tab-content entry" style="display:block;">
                                 内容
@@ -137,14 +134,16 @@
 
 <script>
 //导入放大镜插件
-import '@/lib/imgzoom/css/magnifier.css';
-import '@/lib/imgzoom/js/magnifier.js';
-import $ from 'jquery';
+import "@/lib/imgzoom/css/magnifier.css";
+import "@/lib/imgzoom/js/magnifier.js";
+import $ from "jquery";
 
 import AppAside from "./subcom/CommonAside.vue";
+import Comment from "./subcom/Commoncomment.vue";
 export default {
   components: {
-    AppAside
+    AppAside,
+   Comment
   },
   data() {
     return {
@@ -171,19 +170,7 @@ export default {
     this.getTop();
   },
 
-mounted () {
-    var magnifierConfig = {
-		magnifier : "#magnifier1",//最外层的大容器
-		width : 370,//承载容器宽
-		height : 370,//承载容器高
-		moveWidth : null,//如果设置了移动盒子的宽度，则不计算缩放比例
-		zoom : 5//缩放比例
-	};
-
-setTimeout(function () {
-	var _magnifier = $().imgzoon(magnifierConfig);
-},100)
-},
+  mounted() {},
 
   // 商品详情页面的右侧列表, 可以点击切换不同的商品进行预览
   // 但是默认情况下当前页面切换到当前页面不会触发组件的重新渲染, 为了解决这个问题,
@@ -193,6 +180,19 @@ setTimeout(function () {
     $route() {
       this.id = this.$route.params.id;
       this.getTop();
+    },
+    top() {
+      var magnifierConfig = {
+        magnifier: "#magnifier1", //最外层的大容器
+        width: 370, //承载容器宽
+        height: 370, //承载容器高
+        moveWidth: null, //如果设置了移动盒子的宽度，则不计算缩放比例
+        zoom: 5 //缩放比例
+      };
+
+      setTimeout(function() {
+        var _magnifier = $().imgzoon(magnifierConfig);
+      }, 100);
     }
   }
 };
