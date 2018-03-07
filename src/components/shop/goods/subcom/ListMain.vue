@@ -29,7 +29,7 @@
                                     <p>
                                         <strong>库存 60</strong>
                                         <span>市场价：
-                                            <s>{{subitem.market_price}}</s>
+                                            <!-- <s>{{subitem.market_price}}</s> -->
                                         </span>
                                     </p>
                                 </div>
