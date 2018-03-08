@@ -21,7 +21,7 @@
 
 <script>
 export default {
-  data() {
+  data() { 
     return {
       ruleForm2: {
         user_name: "ivanyb",

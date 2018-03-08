@@ -1,14 +1,5 @@
 <template>
     <div>
-        <!-- 导航 -->
-        <div class="section">
-            <div class="location">
-                <span>当前位置：</span>
-                <router-link to="/">首页</router-link>&gt;
-                <router-link to="">购物车</router-link>
-            </div>
-        </div>
-
         <div class="section">
             <div class="wrapper">
                 <div class="bg-wrap">

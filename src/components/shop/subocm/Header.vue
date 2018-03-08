@@ -1,3 +1,4 @@
+
 <template>
     <div id="header" class="header">
         <div class="head-top">
@@ -8,18 +9,20 @@
                     <a target="_blank" href="#"></a>
                 </div>
                 <div id="menu" class="right-box">
-                    <a href="/#/shop/shopcart">购物车</a>
+                    <a href="/login.html">登录</a>
+                    <a href="/register.html">注册</a>
                     <strong>|</strong>
-                    <!--<a href="/content/contact.html"><i class="iconfont icon-phone"></i>联系我们</a>
-                       <a href="/cart.html"><i class="iconfont icon-cart"></i>购物车(<span id="shoppingCartCount"><script type="text/javascript" src="/tools/submit_ajax.ashx?action=view_cart_count"></script></span>)</a>-->
+                    <a>
+                        <i class="iconfont icon-phone"></i>联系我们</a>
+                    <router-link :to="{ name: 'shopcart' }">
+                        <i class="iconfont icon-cart"></i>
+                        <span>购物车({{$store.getters.total}})</span>
+                    </router-link>
                 </div>
             </div>
         </div>
         <div class="head-nav">
             <div class="section">
-                <!-- <div class="logo">
-                       <a href="/index.html"><img width="230px" height="70px" src="/templates/main/images/logo.png" /></a>
-                   </div>-->
                 <div id="menu2" class="nav-box menuhd">
                     <ul>
                         <li class="index">
@@ -63,28 +66,26 @@
                     <a href="javascript:;" onclick="SiteSearch('/search.html', '#keywords');">
                         <i class="iconfont icon-search"></i>
                     </a>
-                    
+
                 </div>
             </div>
         </div>
     </div>
 </template>
 
-<script> 
+<script>
 export default {
-    data () {
-        return {
-            
-        }
-    }
+  data() {
+    return {};
+  }
 };
 </script>
 
 <style scoped aimg="less">
-.out{
- background-color: #f60;
+.out {
+  background-color: #f60;
 }
-.over{
-    background-color: #fff;
+.over {
+  background-color: #fff;
 }
-</style>
+</style> 

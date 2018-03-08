@@ -1,13 +1,5 @@
 <template>
     <div>
-        <!-- 导航栏 -->
-        <!-- <div class="section">
-            <div class="location">
-                <span>当前位置：</span>
-                <router-link :to="{name: 'goodsList'}">首页</router-link>&gt;
-                <router-link to="">商品详情</router-link>
-            </div>
-        </div> -->
 
         <!-- 商品详情 -->
         <div class="section">
@@ -143,7 +135,7 @@ import Comment from "./subcom/Commoncomment.vue";
 export default {
   components: {
     AppAside,
-   Comment
+    Comment
   },
   data() {
     return {
@@ -166,14 +158,16 @@ export default {
       });
     },
     //购物车
-    addCart(){
-        this.$store.commit('modify',{id:this.id,num:this.num})
-        this.num =0;//加完之后重置计数框
+    addCart() {
+    let index=this.num+(this.$store.state.cart[this.id]||0)//当前端数量加上以前的数量
+    this.$store.commit('modify',{id:this.id,num:index})
+    //   console.log(index);
+      this.num = 0; //加完之后重置计数框
     }
   },
   created() {
     this.getTop();
-  },
+  },   
 
   mounted() {},
 
