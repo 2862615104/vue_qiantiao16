@@ -1,52 +1,50 @@
 <template>
     <div>
+        <!-- 导航 -->
         <div class="section">
             <div class="location">
                 <span>当前位置：</span>
-                <a href="/index.html">首页</a> &gt;
-                <a href="/cart.html">购物车</a>
+                <router-link to="/">首页</router-link>&gt;
+                <router-link to="">购物车</router-link>
             </div>
         </div>
 
         <div class="section">
             <div class="wrapper">
                 <div class="bg-wrap">
-                    <!--购物车头部-->
-                    <div class="cart-head clearfix"> 
+                    <!-- 头部进度 -->
+                    <div class="cart-head clearfix">
                         <h2>
                             <i class="iconfont icon-cart"></i>我的购物车</h2>
                         <div class="cart-setp">
                             <ul>
                                 <li class="first active">
                                     <div class="progress">
-                                        <span>1</span>
-                                        放进购物车
+                                        <span>1</span> 放进购物车
                                     </div>
                                 </li>
                                 <li>
                                     <div class="progress">
-                                        <span>2</span>
-                                         填写订单信息
+                                        <span>2</span> 填写订单信息
                                     </div>
                                 </li>
                                 <li class="last">
                                     <div class="progress">
-                                        <span>3</span>
-                                        支付/确认订单
+                                        <span>3</span> 支付/确认订单
                                     </div>
                                 </li>
                             </ul>
                         </div>
                     </div>
-                    <!--购物车头部-->
-                    <!--商品列表-->
+
+                    <!-- 商品列表 -->
                     <div class="cart-box">
                         <input id="jsondata" name="jsondata" type="hidden">
                         <table width="100%" align="center" class="cart-table" border="0" cellspacing="0" cellpadding="8">
                             <tbody>
                                 <tr>
                                     <th width="48" align="center">
-                                        <a>全选</a>
+                                        <el-switch :value="allSelected" @change='allChange' active-color="#13ce66"></el-switch>
                                     </th>
                                     <th align="left" colspan="2">商品信息</th>
                                     <th width="84" align="left">单价</th>
@@ -54,6 +52,30 @@
                                     <th width="104" align="left">金额(元)</th>
                                     <th width="54" align="center">操作</th>
                                 </tr>
+
+                                <tr v-for="item in goodsList" :key="item.id">
+                                    <th width="48" align="center">
+
+                                        <el-switch v-model="item.selected" active-color="#13ce66"></el-switch>
+                                    </th>
+                                    <th align="left" colspan="2">
+                                        <img width="50" height="50" :src="item.img_url" alt="">
+                                        <span>{{item.title}}</span>
+                                    </th>
+                                    <th width="84" align="left">
+                                        ￥{{item.sell_price}}
+                                    </th>
+                                    <th width="104" align="center">
+                                        <el-input-number v-model="$store.state.cart[item.id]" size="mini" :min="1"></el-input-number>
+                                    </th>
+                                    <th width="104" align="left">
+                                        <td>￥{{item.sell_price * $store.state.cart[item.id]}}</td>
+                                    </th>
+                                    <th width="54" align="center">
+                                        <el-button size="mini">删除</el-button>
+                                    </th>
+                                </tr>
+
                                 <tr>
                                     <td colspan="10">
                                         <div class="msg-tips">
@@ -68,26 +90,27 @@
                                         </div>
                                     </td>
                                 </tr>
+
                                 <tr>
                                     <th align="right" colspan="8">
                                         已选择商品
-                                        <b class="red" id="totalQuantity">0</b> 件 &nbsp;&nbsp;&nbsp; 商品总金额（不含运费）：
+                                        <b class="red" id="totalQuantity">{{total}}</b> 件 &nbsp;&nbsp;&nbsp; 商品总金额（不含运费）：
                                         <span class="red">￥</span>
-                                        <b class="red" id="totalAmount">0</b>元
+                                        <b class="red" id="totalAmount">{{totalPrice}}</b>元
                                     </th>
                                 </tr>
                             </tbody>
                         </table>
                     </div>
-                    <!--/商品列表-->
+
                     <!--购物车底部-->
                     <div class="cart-foot clearfix">
                         <div class="right-box">
-                            <button class="button" onclick="javascript:location.href='/index.html';">继续购物</button>
-                            <button class="submit" onclick="formSubmit(this, '/', '/shopping.html');">立即结算</button>
+                            <button class="button">继续购物</button>
+                            <button class="submit">立即结算</button>
                         </div>
                     </div>
-                    <!--购物车底部-->
+
                 </div>
             </div>
         </div>
@@ -95,9 +118,54 @@
 </template>
 
 <script>
-export default {};
+export default {
+  data() {
+    return {
+      goodsList: []
+    };
+  },
+  computed: {
+    allSelected() {
+      return this.goodsList.every(v => v.selected);
+    },
+    total() {
+      let sum = 0;
+      this.goodsList.forEach(
+        v => v.selected && (sum += this.$store.state.cart[v.id])
+      );
+      return sum;
+    },
+    //数据总数
+    totalPrice() {
+        let sum = 0;
+      this.goodsList.forEach(
+        v => v.selected && (sum += this.$store.state.cart[v.id] * v.sell_price)
+      );
+      return sum;
+    }
+  },
+  methods: {
+    getGoodsList() {
+      let ids = Object.keys(this.$store.state.cart);
+      this.$http.get(this.$api.shopcartGoods + ids).then(res => {
+        if (res.data.status == 0) {
+          res.data.message.forEach(v => (v.selected = true));
+          this.goodsList = res.data.message;
+        }
+      });
+    },
+    //监听全选按钮的点击事件，得到新的状态值，然后遍历所有商品一次设为新的状态
+    allChange(index) {
+      this.goodsList.forEach(v => (v.selected = index));
+    },
+    //如果所有商品的selected外true那么该商品的购买数量
+  },
+  created() {
+    this.getGoodsList();
+  }
+};
 </script>
 
-<style scoped>
+<style>
 
 </style>

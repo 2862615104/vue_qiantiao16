@@ -30,7 +30,7 @@ export default new Router({
     //账号
     { name: 'login', path: '/login', component: Login },
     //商城路由
-    { name: 'shop', path: 'shop', component: Shop, children: [...goods, ...shopcart, ...order] }
+    { name: 'shop', path: '/shop', component: Shop, children: [...goods, ...shopcart, ...order] }
     
   ] 
 })
