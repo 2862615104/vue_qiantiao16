@@ -24,33 +24,34 @@
                 <div id="menu2" class="nav-box menuhd">
                     <ul>
                         <li class="index">
-                            <a href="/index.html">
-                                首页
+                            <a href="/#/goods/list">
+                                <span class="out" style="top: 0px;">首页</span>
+                                <span class="over" style="top: -48px;">首页</span>
                             </a>
                         </li>
                         <li class="news">
-                            <a href="/news.html">
+                            <a href="#">
                                 学员问题汇总
                             </a>
                         </li>
                         <li class="photo">
-                            <a href="/photo.html">
+                            <a href="#">
                                 重难点专区
                             </a>
                         </li>
                         <!--<li class="goods"><a href="">就业阶段</a></li>-->
                         <li class="video">
-                            <a href="/video.html">
+                            <a href="#">
                                 前端常用功能
                             </a>
                         </li>
                         <li class="down">
-                            <a href="/down.html">
+                            <a href="#">
                                 资源下载
                             </a>
                         </li>
                         <li>
-                            <a target="_blank" href="/admin/index.aspx">
+                            <a href="#">
                                 问题提交
                             </a>
                         </li>
@@ -63,16 +64,28 @@
                     <a href="javascript:;" onclick="SiteSearch('/search.html', '#keywords');">
                         <i class="iconfont icon-search"></i>
                     </a>
+                    
                 </div>
             </div>
         </div>
     </div>
 </template>
 
-<script>
-export default {};
+<script> 
+export default {
+    data () {
+        return {
+            
+        }
+    }
+};
 </script>
 
-<style scoped>
-
+<style scoped aimg="less">
+.out{
+ background-color: #f60;
+}
+.over{
+    background-color: #fff;
+}
 </style>

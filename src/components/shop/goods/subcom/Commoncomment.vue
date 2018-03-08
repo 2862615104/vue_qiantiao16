@@ -78,7 +78,7 @@ export default {
       });
     }
   },
-
+ 
   created() {
     this.getCmments();
     // console.log(this.id);

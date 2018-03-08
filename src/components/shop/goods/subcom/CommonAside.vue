@@ -4,7 +4,6 @@
             <div class="sidebar-box">
                 <h4>推荐商品</h4>
                 <ul class="side-img-list">
-                
                     <li v-for="(item, i) in list" :key="item.id">
                         <div class="img-box">
                             <label>{{ i + 1 }}</label>
@@ -32,7 +31,7 @@ export default {
                 let date = new Date(tplDate);
                 return `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}`;
             }
-        }
+        } 
 };
 </script>
 

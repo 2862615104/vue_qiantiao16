@@ -2,7 +2,7 @@
     <div class="footer">
         <div class="section">
             <div class="foot-nav">
-                <a href="/index.html">首页</a>
+                <a href="/#/goods/list">首页</a>
                 <strong>|</strong>
                 <a href="/news.html">学员问题汇总</a>
                 <strong>|</strong>           
