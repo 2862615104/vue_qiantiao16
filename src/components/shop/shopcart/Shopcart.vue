@@ -72,7 +72,7 @@
                                         <td>￥{{item.sell_price * $store.state.cart[item.id]}}</td>
                                     </th>
                                     <th width="54" align="center">
-                                        <el-button size="mini">删除</el-button>
+                                        <el-button  @click="del(item.id)" size="mini">删除</el-button>
                                     </th>
                                 </tr>
 
@@ -128,6 +128,7 @@ export default {
     allSelected() {
       return this.goodsList.every(v => v.selected);
     },
+     //如果所有商品的selected外true那么该商品的购买数量
     total() {
       let sum = 0;
       this.goodsList.forEach(
@@ -158,7 +159,13 @@ export default {
     allChange(index) {
       this.goodsList.forEach(v => (v.selected = index));
     },
-    //如果所有商品的selected外true那么该商品的购买数量
+     //删除
+       del(id){
+           this.goodsList=this.goodsList.filter(v=>v.id !=id);
+           this.$store.commit('del',id)
+       }
+
+ 
   },
   created() {
     this.getGoodsList();
