@@ -14,7 +14,8 @@
                 <div class="bg-wrap">
                     <!-- 头部进度 -->
                     <div class="cart-head clearfix">
-                        <h2><i class="iconfont icon-cart"></i>我的购物车</h2>
+                        <h2>
+                            <i class="iconfont icon-cart"></i>我的购物车</h2>
                         <div class="cart-setp">
                             <ul>
                                 <li class="first active">
@@ -47,20 +48,20 @@
                                     <dt>收货人姓名：</dt>
                                     <dd>
                                         <input name="book_id" id="book_id" type="hidden" value="0">
-                                        <input v-model="form.accept_name"  name="accept_name" id="accept_name" type="text" class="input" datatype="s2-20" sucmsg=" ">
+                                        <input v-model="form.accept_name" name="accept_name" id="accept_name" type="text" class="input" datatype="s2-20" sucmsg=" ">
                                         <span class="Validform_checktip">*收货人姓名</span>
                                     </dd>
                                 </dl>
                                 <dl class="form-group">
                                     <dt>所属地区：</dt>
                                     <dd>
-                                        省市区三级联动
+                                        <v-distpicker @selected="pickerChange"></v-distpicker>
                                     </dd>
                                 </dl>
                                 <dl class="form-group">
                                     <dt>详细地址：</dt>
                                     <dd>
-                                        <input v-model="form.address"  name="address" id="address" type="text" class="input" datatype="*2-100" sucmsg=" ">
+                                        <input v-model="form.address" name="address" id="address" type="text" class="input" datatype="*2-100" sucmsg=" ">
                                         <span class="Validform_checktip">*除上面所属地区外的详细地址</span>
                                     </dd>
                                 </dl>
@@ -104,7 +105,7 @@
                                 <!--取得一个DataTable-->
                                 <li>
                                     <label>
-                                        <el-radio v-model="form.payment_id" label="1" >顺丰</el-radio>
+                                        <el-radio v-model="form.payment_id" label="1">顺丰</el-radio>
                                     </label>
                                 </li>
                                 <li>
@@ -133,7 +134,7 @@
                                         <th width="104" align="left">金额(元)</th>
                                     </tr>
                                     <!-- 标底 -->
-                                    <tr v-for="item in goodsList" :key="item.id" >
+                                    <tr v-for="item in goodsList" :key="item.id">
                                         <td width="68">
                                             <router-link :to="{name: 'goodsDetail', params: {id: item.id}}">
                                                 <img class="img" :src="item.img_url">
@@ -167,15 +168,14 @@
                                     <dl>
                                         <dt>订单备注(100字符以内)</dt>
                                         <dd>
-                                            <textarea v-model="form.message"  name="message" class="input" style="height:35px;"></textarea>
+                                            <textarea v-model="form.message" name="message" class="input" style="height:35px;"></textarea>
                                         </dd>
                                     </dl>
                                 </div>
                                 <div class="right-box">
                                     <p>
                                         商品
-                                        <label class="price">{{total}}</label> 件&nbsp;&nbsp;&nbsp;&nbsp; 
-                                        商品金额：￥
+                                        <label class="price">{{total}}</label> 件&nbsp;&nbsp;&nbsp;&nbsp; 商品金额：￥
                                         <label id="goodsAmount" class="price">{{totalPrice}}</label> 元&nbsp;&nbsp;&nbsp;&nbsp;
                                     </p>
                                     <p>
@@ -201,64 +201,94 @@
 </template>
 
 <script>
-    export default {   
-           data() {
+//引入省市县联动插件
+        import VDistpicker from "v-distpicker";
+        export default {
+        components: {
+            VDistpicker
+        },
+        data() {
             return {
-                ids:this.$route.params.ids,
-                goodsList: [],
-                form: {
-                    express_id : '3',
-                    // payment_id:'6',
-                },
-                expressPriceTable:{1:20,2:30,3:40,4:50}//快递的id
-            
-            }
+            ids: this.$route.params.ids,
+            goodsList: [],
+            form: {
+                express_id: "3",
+                payment_id:'6',
+            },
+            expressPriceTable: { 1: 20, 2: 30, 3: 40, 4: 50 } //快递的id
+            };
         },
         computed: {
             //商品件 总数 => 遍历商品列表，累加他们的数量
-            total(){
-              return this.goodsList.reduce((sum,v)=>sum+=this.$store.state.cart[v.id], 0)
+            total() {
+            return this.goodsList.reduce(
+                (sum, v) => (sum += this.$store.state.cart[v.id]),
+                0
+            );
             },
             //商品金额
-            totalPrice(){
-              return this.goodsList.reduce((sum,v)=>sum+=this.$store.state.cart[v.id] *v.sell_price, 0)
+            totalPrice() {
+            return this.goodsList.reduce(
+                (sum, v) => (sum += this.$store.state.cart[v.id] * v.sell_price),
+                0
+            );
             },
             //运费
-            expressPrice(){
-             return this.expressPriceTable[this.form.express_id]
+            expressPrice() {
+            return this.expressPriceTable[this.form.express_id];
             },
             //整数
-            orderPrice(){
-               return  this.totalPrice+this.expressPrice;
-            },
-        },
-        methods:{
-            //获取商品数据
-            getGoodsList(){
-                    this.$http.get(this.$api.shopcartGoods+this.ids).then(res=>{
-                        // console.log(res);
-                        if (res.data.status==0) {
-                            this.goodsList=res.data.message;
-                        }
-                    })
+            orderPrice() {
+            return this.totalPrice + this.expressPrice;
             }
         },
-        //     // 下订单按钮, 成功后跳转到付款页面
-            submit() {
-                this.$http.post(this.$api.orderSubmit, this.form).then(res => {
-                    console.log(res);
-                    // if(res.data.status == 0) {
-                        // this.$router.push({name: 'orderPay', params: {id: 1}});
-                    // }
-                })
+        methods: {
+            //获取商品数据
+            getGoodsList() {
+            this.$http.get(this.$api.shopcartGoods + this.ids).then(res => {
+                // console.log(res);
+                if (res.data.status == 0) {
+                this.goodsList = res.data.message;
+                }
+            });
             },
-        
+             //     // 下订单按钮, 成功后跳转到付款页面
+              // 下订单按钮, 成功后跳转到付款页面
+            // 接口需要几个特殊字段，在数据提交前需要手动添加上：
+            // goodsAmount  商品总价，有计算属性可以直接拿到
+            // expressMoment  快递费，有计算属性可以直接拿到
+            // goodsids 下单商品ids，url传递过来了，直接拿
+            // cargoodsobj 下单商品id与数量映射对象，需要自己通过ids生成
+        submit() {
+             this.form.goodsAmount=this.orderPrice;
+             this.form.expressMoment=this.expressPrice;
+             this.form.goodsids = this.ids;
+             this.form.cargoodsobj=this.ids.split(',')
+                                   .reduce((o,v)=>{
+                                     o[v]=this.$store.state.cart[v];
+                                     return o;
+                                   },{})
+             this.$http.post(this.$api.orderSubmit, this.form).then(res => {
+            console.log(res);
+            if(res.data.status == 0) {
+            this.$router.push({name: 'orderPay', params: {id: res.data.message.orderid}});
+            }
+            });
+        },
+        //省市区联动数据
+         pickerChange(val) {
+             this.form.area = val;
+             console.log(val)
+        },
+        },
        
-        created () {
+
+        created() {
             this.getGoodsList();
         }
-    }
+        };
 </script>
 
 <style>
+
 </style>
