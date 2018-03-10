@@ -9,13 +9,13 @@ import Shopcart from '../components/shop/shopcart/Shopcart.vue';
 import OrderSite from '../components/shop/order/Site.vue';
 import OrderPay from '../components/shop/order/Pay.vue';
 import OrderComplete from '../components/shop/order/Complete.vue';
-
+import Pay from '../components/shop/Pay/Pay';
  
 Vue.use(Router) 
 let goods=[
   { name: 'goodsList', path: '/goods/list', component: GoodsList },
   { name: 'goodsDetail', path: '/goods/detail/:id', component: GoodsDetail},
-]
+]  
 
 let shopcart = [
     { name: 'shopcart', path: 'shopcart', component: Shopcart },
@@ -27,6 +27,7 @@ let order = [
   ];
 let router= new Router({
   routes: [
+     { name: 'pay', path: '/pay/:id', component: Pay },
     //账号
     { name: 'login', path: '/login', component: Login },
     //商城路由
