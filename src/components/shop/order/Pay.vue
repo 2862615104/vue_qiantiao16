@@ -82,27 +82,28 @@ import $ from 'jquery';
                 timer:null
             }
         },
-        methods: {
-            // 获取订单信息
-            getOrder() {
-                this.$http.get(this.$api.order + this.id).then(res => {
-                    if(res.data.status == 0) {
-                        this.order = res.data.message[0]; // 注意接口返回的是一个数组
-                    }
-                })
+        methods:{
+            getOrder(){
+              this.$http.get(this.$api.order+this.id).then(res=>{
+                  if (res.data.status==0) {
+                       this.order=res.data.message[0]//注意接口必须要返回的数据
+                  }
+              })
             },
-            // 开启定时器不断检测当前订单的状态, 如果为2, 证明支付成功过了, 那么跳转到支付成功页面
-            checkStatus() {
-                this.timer = setInterval(() => {
-                    console.log(1111)
-                    this.$http.get(this.$api.order + this.id).then(res => {
-                        // 成功后清除定时器, 然后跳到到成功页面
-                        if(res.data.message[0].status == 2) {
+            //开通一个定时器
+            checkStatus(){
+                this.timer=setInterval(()=>{
+                    // console.log(111);
+                    this.$http.get(this.$api.order+this.id).then(res=>{
+                        // console.log(res);
+                        if (res.data.message[0].status==2) {
                             clearInterval(this.timer);
-                            this.$router.push({name: 'orderComplete'});
+                              this.$router.push({name: 'orderComplete'});
                         }
+
                     })
-                }, 10000);
+                },3000)
+               
             }
         },
 
@@ -112,14 +113,14 @@ import $ from 'jquery';
         },
         mounted () {
             $('#container').erweima({
-                text:`http://localhost:8080/pay/${this.id}`,
+                text:'http://localhost:8080/pay/${this.id}',
                 label:'有惊喜'
             })
         },
-       destroyed () {
-           //组件销毁时会自动被调用, 在这个生命周期函数里一般会主动销毁各种不能自动释放的资源
+ // 组件销毁时会自动被调用, 在这个生命周期函数里一般会主动销毁各种不能自动释放的资源
+        destroyed() {
             clearInterval(this.timer);
-       }
+        }
     }
 </script>
 

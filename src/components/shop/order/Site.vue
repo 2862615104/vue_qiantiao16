@@ -270,6 +270,7 @@
              this.$http.post(this.$api.orderSubmit, this.form).then(res => {
             console.log(res);
             if(res.data.status == 0) {
+            this.ids.split(',').forEach(v => this.$store.commit('del', v))
             this.$router.push({name: 'orderPay', params: {id: res.data.message.orderid}});
             }
             });
